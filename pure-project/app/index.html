@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Product manager</title>
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     
     <link rel="stylesheet" href="src/styles/libs/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="src/styles/styles.css">
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="src/scripts/main.js"></script>
 
 </head>
 <body class="main">
@@ -15,7 +17,7 @@
         <h3 class="panel-title">Products list</h3>
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table id="products-table" class="table">
           <thead>
             <tr>
               <th>Title</th>
@@ -25,31 +27,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            <script id="products-table-tpl" type="product/template">
+                <tr>
+                  <td>{{title}}</td>
+                  <td>{{sku}}</td>
+                  <td>{{price}}</td>
+                  <td>
+                      <div class="btn btn-primary">edit</div>
+                      <div class="btn btn-warning">delete</div>
+                  </td>
+                </tr>
+            </script>
           </tbody>
         </table>
       </div>
     </div>
-
-    <script src="src/scripts/libs/jquery.js"></script>
-    <script src="src/scripts/main.js"></script>
-
 </body>
 </html>

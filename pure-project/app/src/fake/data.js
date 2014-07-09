@@ -1,4 +1,4 @@
-var data = {
+{
 	"products": [
 		{"title":"Products 1", "sku":"1", "price":"10.22"},
 		{"title":"Products 2", "sku":"11", "price":"10.122"},
