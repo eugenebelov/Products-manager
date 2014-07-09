@@ -33,4 +33,9 @@ $(function(){
 	};
 
 	Products.init();
+
+	$(window).on('onhashchange', function(){
+		// Alerts every time the hash changes!
+		console.log( location.hash );
+	})
 });
