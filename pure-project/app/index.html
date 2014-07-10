@@ -9,6 +9,7 @@
 
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="src/scripts/router.js"></script>
+    <script type="text/javascript" src="src/scripts/hash.js"></script>
     <script type="text/javascript" src="src/scripts/main.js"></script>
 
 </head>
@@ -18,29 +19,7 @@
         <h3 class="panel-title">Products manager</h3>
       </div>
       <div id="view" class="panel-body">
-        <table id="products-table" class="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Sku</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <script id="products-table-tpl" type="product/template">
-                <tr>
-                  <td>{{title}}</td>
-                  <td>{{sku}}</td>
-                  <td>{{price}}</td>
-                  <td class="actions">
-                      <div class="btn btn-primary" data-action="edit:{{prodId}}">edit</div>
-                      <div class="btn btn-warning" data-action="delete:{{prodId}}">delete</div>
-                  </td>
-                </tr>
-            </script>
-          </tbody>
-        </table>
+        
       </div>
     </div>
 </body>
