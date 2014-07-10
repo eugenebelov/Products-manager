@@ -5,11 +5,17 @@ $(function(){
 
 	$(window).on('hashchange', function() {
 	  var page = Hash.get("page");
-	  if(main[page]) main[page]();
-
+	  if(main[page]) 
+	  	main[page]();
+	  else 
+	  	main.index();
 	});
 
 	var main = {
+		index: function () {
+			// get data
+			main.preview();
+		},
 		preview:function () {
 			Products.get(function(data){
 				Views.render('list', data, ["title", "sku", "price", "prodId"]);
