@@ -29,6 +29,9 @@ $(function(){
 				self.productsList = data.products;
 				self.attachTemplate();
 			});
+		},
+		get: function() {
+			return this.productsList;
 		}
 	};
 
