@@ -3,11 +3,18 @@ $(function(){
 		 Hash.set("page", "preview");
 	});
 
-	var Preview = {
-		init:function(context){
+	window.productModel = {
+		view:function(context){
 
+		},
+		onSaveEdit:function(context){
+
+		},
+		onEdit:function(id){
+			Hash.setParam("#page=edit&",'id',id);
+			
 		}
-	} 
+	};
 
 	$(window).on('hashchange', function() {
 	  var page = Hash.get("page");
@@ -32,13 +39,14 @@ $(function(){
 			var htmlItems = Views.parseTemplate('product-list-item-tpl', data, ["title", "sku", "price"]);
 			console.log(htmlItems);
 			Views.render('product-list-tpl', [{'items':htmlItems}], ["items"]);
-			Preview.init();
+			//Preview.init();
 
 		},
 		edit:function () {
-			var data = [{'title':'lolol', 'sku':'12', 'price':'123'}];
-			Views.render('edit-product-tpl', data, ["title", "sku", "price"]);
-			Preview.init();	
+			var id = Hash.get('id');
+			var data = Products.getById(id);
+			Views.render('edit-product-tpl', [data], ["title", "sku", "price"]);
+			//Preview.init();	
 		}
 	}
 
@@ -71,7 +79,8 @@ $(function(){
 			$.each( data, function( i, dataObj ) {
 				tmpTeplate = template;
 			 	$.each( params, function( j, dataParam ) {
-			 		tmpTeplate = tmpTeplate.replace('{{'+dataParam+'}}', dataObj[dataParam]);
+			 		var reg = new RegExp('{{'+dataParam+'}}',"g");
+			 		tmpTeplate = tmpTeplate.replace(reg, dataObj[dataParam]);
 			 	});
 			 	result.push(tmpTeplate);
 
@@ -87,37 +96,15 @@ $(function(){
 
 	var Products = {
 		path:"src/scripts/fake/data.json",
-		//init: function() {
-		//	this.fetch();
-		//},
-		// attachTemplate: function(tpl) {
-		// 	var template = tpl,
-		// 		$prodBody = $("#products-table-body");
-		// 		readyTpl = [];
-
-		// 	$.each(this.productsList, function(index, obj) {
-		// 		readyTpl[readyTpl.length] = template.replace(/{{title}}/ig, obj.title)
-		// 							.replace(/{{sku}}/ig, obj.sku)
-		// 							.replace(/{{price}}/ig, obj.price)
-		// 							.replace(/{{prodId}}/ig, index);
-		// 	});
-
-		// 	$prodBody.html(readyTpl.join(""));
-		// 	$prodBody.find('.actions > .btn').click(function() {
-		// 		console.log($(this).attr('data-action'));
-		// 	})
-			
-		// 	$('#view').append(template);
-		// },
-
-		getById: function() {
-			var self = this;
-
-			/*$.getJSON(this.path, function(data) {
-				self.productsList = data.products;
-				Views.getView("list", $.proxy( Products.attachTemplate, Products));
-			});*/
-			
+		getById: function(id) {
+			var result = {};
+			$.each(this.get(), function(index, obj) {
+				if(obj.sku == id) {
+					result = obj;
+					return false;
+				}
+			});
+			return result;
 		},
 		get: function(callback) {
 			var self = this;
