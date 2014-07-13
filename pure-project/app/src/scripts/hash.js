@@ -23,7 +23,7 @@ var Hash = {
         } else {
             url += (!url.length ? '#' : '&') + k + '=' + v;
         }
-        return url;
+        location.hash = url;
     },
     get: function(k)
     {

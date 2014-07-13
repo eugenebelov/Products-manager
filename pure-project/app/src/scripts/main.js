@@ -3,50 +3,39 @@ $(function(){
 		 Hash.set("page", "preview");
 	});
 
+	$(window).on('hashchange', function() {
+		var page = Hash.get("page");
+	  	if(main[page]) 
+	  		main[page]();
+	  	else 
+	  		main.index();
+	});
+
 	window.productModel = {
 		view:function(context){
 
 		},
-		onSaveEdit:function(context){
-
+		onSaveEdit:function(id, context){
+			Products.edit(id, JSON.stringify(context));
 		},
 		onEdit:function(id){
-			Hash.setParam("#page=edit&",'id',id);
-			
+			Hash.setParam("page=edit",'id',id);
 		}
 	};
 
-	$(window).on('hashchange', function() {
-	  var page = Hash.get("page");
-	  if(main[page]) 
-	  	main[page]();
-	  else 
-	  	main.index();
-	});
-
 	var main = {
 		index: function () {
-			// get data
 			main.preview();
 		},
 		preview:function () {
-			/*Products.get(function(data){
-				Views.parseTemplate('list', data, ["title", "sku", "price", "prodId"]);
-				//console.log(data)
-			});
-			*/
 			var data = Products.get();
 			var htmlItems = Views.parseTemplate('product-list-item-tpl', data, ["title", "sku", "price"]);
-			console.log(htmlItems);
 			Views.render('product-list-tpl', [{'items':htmlItems}], ["items"]);
-			//Preview.init();
-
 		},
 		edit:function () {
 			var id = Hash.get('id');
 			var data = Products.getById(id);
 			Views.render('edit-product-tpl', [data], ["title", "sku", "price"]);
-			//Preview.init();	
 		}
 	}
 
@@ -86,16 +75,14 @@ $(function(){
 
 			});
 			return result.join('');
-			//console.log(result);
-			//for(var i = 0, l = params.length; i < l; i++){
-			//	if()	
-			//}
-			// console.log(template);
 		}
 	}
 
 	var Products = {
 		path:"src/scripts/fake/data.json",
+		edit: function(id, edited) {
+			console.log(id, edited);
+		},
 		getById: function(id) {
 			var result = {};
 			$.each(this.get(), function(index, obj) {
@@ -118,17 +105,9 @@ $(function(){
 				}).done(function(data){
 					self.productsList = data.products;
 				});
-				// $.getJSON(this.path, function(data) {
-				// 	self.productsList = data.products;
-				// 	callback(data.products);
-				// });
-			//} else {
-			//	callback(self.productsList);
 			}
 			return self.productsList;
 		}
 	};
-
-	//Products.init();
 
 });
