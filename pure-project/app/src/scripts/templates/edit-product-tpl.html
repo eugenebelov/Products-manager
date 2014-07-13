@@ -1,0 +1,21 @@
+<table id="products-edit-table" class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Sku</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="products-table-body">
+    <tr>
+	  <td><input type="text" class="form-control" placeholder="title" value="{{title}}"/></td>
+	  <td><input type="text" class="form-control" placeholder="sku" value="{{sku}}"/></td>
+	  <td><input type="text" class="form-control" placeholder="price" value="{{price}}"/></td>
+	  <td class="actions">
+	      <div class="btn btn-primary" data-action="edit:{{prodId}}">save</div>
+	      <div class="btn btn-warning" data-action="delete:{{prodId}}">cancel</div>
+	  </td>
+	</tr>
+  </tbody>
+</table>

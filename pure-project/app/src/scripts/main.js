@@ -3,6 +3,12 @@ $(function(){
 		 Hash.set("page", "preview");
 	});
 
+	var Preview = {
+		init:function(context){
+
+		}
+	} 
+
 	$(window).on('hashchange', function() {
 	  var page = Hash.get("page");
 	  if(main[page]) 
@@ -17,15 +23,22 @@ $(function(){
 			main.preview();
 		},
 		preview:function () {
-			Products.get(function(data){
-				Views.render('list', data, ["title", "sku", "price", "prodId"]);
+			/*Products.get(function(data){
+				Views.parseTemplate('list', data, ["title", "sku", "price", "prodId"]);
 				//console.log(data)
-			})	
+			});
+			*/
+			var data = Products.get();
+			var htmlItems = Views.parseTemplate('product-list-item-tpl', data, ["title", "sku", "price"]);
+			console.log(htmlItems);
+			Views.render('product-list-tpl', [{'items':htmlItems}], ["items"]);
+			Preview.init();
+
 		},
 		edit:function () {
-			//Products.get(function(data){
-				console.log('edit');
-			//})	
+			var data = [{'title':'lolol', 'sku':'12', 'price':'123'}];
+			Views.render('edit-product-tpl', data, ["title", "sku", "price"]);
+			Preview.init();	
 		}
 	}
 
@@ -45,21 +58,26 @@ $(function(){
 			});
 			return tpl;
 		},
+		render: function(name, data, params){
+			var html = Views.parseTemplate(name, data, params);
+			//console.log(html)
+			$('#view').html(html);
 
-		render: function(view, data, params) {
+		},
+		parseTemplate: function(view, data, params) {
 			var template = this.getView(view);
 			var tmpTeplate = template;
 			var result = [];
 			$.each( data, function( i, dataObj ) {
 				tmpTeplate = template;
 			 	$.each( params, function( j, dataParam ) {
-			 		console.log(dataObj, dataParam);
 			 		tmpTeplate = tmpTeplate.replace('{{'+dataParam+'}}', dataObj[dataParam]);
 			 	});
 			 	result.push(tmpTeplate);
 
 			});
-			console.log(result);
+			return result.join('');
+			//console.log(result);
 			//for(var i = 0, l = params.length; i < l; i++){
 			//	if()	
 			//}
@@ -69,47 +87,58 @@ $(function(){
 
 	var Products = {
 		path:"src/scripts/fake/data.json",
-		init: function() {
-			this.fetch();
-		},
-		attachTemplate: function(tpl) {
-			var template = tpl,
-				$prodBody = $("#products-table-body");
-				readyTpl = [];
+		//init: function() {
+		//	this.fetch();
+		//},
+		// attachTemplate: function(tpl) {
+		// 	var template = tpl,
+		// 		$prodBody = $("#products-table-body");
+		// 		readyTpl = [];
 
-			$.each(this.productsList, function(index, obj) {
-				readyTpl[readyTpl.length] = template.replace(/{{title}}/ig, obj.title)
-									.replace(/{{sku}}/ig, obj.sku)
-									.replace(/{{price}}/ig, obj.price)
-									.replace(/{{prodId}}/ig, index);
-			});
+		// 	$.each(this.productsList, function(index, obj) {
+		// 		readyTpl[readyTpl.length] = template.replace(/{{title}}/ig, obj.title)
+		// 							.replace(/{{sku}}/ig, obj.sku)
+		// 							.replace(/{{price}}/ig, obj.price)
+		// 							.replace(/{{prodId}}/ig, index);
+		// 	});
 
-			$prodBody.html(readyTpl.join(""));
-			$prodBody.find('.actions > .btn').click(function() {
-				console.log($(this).attr('data-action'));
-			})
+		// 	$prodBody.html(readyTpl.join(""));
+		// 	$prodBody.find('.actions > .btn').click(function() {
+		// 		console.log($(this).attr('data-action'));
+		// 	})
 			
-			$('#view').append(template);
-		},
-		fetch: function() {
+		// 	$('#view').append(template);
+		// },
+
+		getById: function() {
 			var self = this;
 
-			$.getJSON(this.path, function(data) {
+			/*$.getJSON(this.path, function(data) {
 				self.productsList = data.products;
 				Views.getView("list", $.proxy( Products.attachTemplate, Products));
-			});
+			});*/
+			
 		},
 		get: function(callback) {
 			var self = this;
 			if (!self.productsList)
 			{
-				$.getJSON(this.path, function(data) {
+				var data = null;
+				$.ajax({
+			  		url: this.path,
+			  		async: false,
+			  		cache: false
+				}).done(function(data){
 					self.productsList = data.products;
-					callback(data.products);
 				});
-			} else {
-				callback(self.productsList);
+				// $.getJSON(this.path, function(data) {
+				// 	self.productsList = data.products;
+				// 	callback(data.products);
+				// });
+			//} else {
+			//	callback(self.productsList);
 			}
+			return self.productsList;
 		}
 	};
 
