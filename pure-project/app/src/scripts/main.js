@@ -16,7 +16,11 @@ $(function(){
 
 		},
 		onAddProduct: function(){
-			Products.addProduct();
+			Hash.set("page", "add");
+		},
+		onSaveAdd: function(context){
+			Products.addProduct(JSON.stringify(context));
+			Hash.set("page", "preview");
 		},
 		onSaveEdit: function(id, context){
 			Products.editProduct(id, JSON.stringify(context));
@@ -28,7 +32,6 @@ $(function(){
 			Products.deleteProduct(id);
 		},
 		cancel: function() {
-			Hash.remove("page");
 			Hash.remove("id");
 			Hash.set("page", "preview");
 		},
@@ -49,8 +52,10 @@ $(function(){
 		edit:function () {
 			var id = Hash.get('id');
 			var data = Products.getById(id);
-			
 			Views.render('edit-product-tpl', [data], ["title", "sku", "price"]);
+		},
+		add:function () {
+			Views.render('add-product-tpl');
 		}
 	}
 
@@ -76,6 +81,8 @@ $(function(){
 		},
 		parseTemplate: function(view, data, params) {
 			var template = this.getView(view);
+			if(!data && !params) return template;
+
 			var tmpTeplate = template;
 			var result = [];
 			$.each( data, function( i, dataObj ) {
@@ -93,13 +100,24 @@ $(function(){
 
 	var Products = {
 		path:"src/scripts/fake/data.json",
-		addProduct: function(id, edited) {
-			console.log("add", id, edited);
-			
+		addProduct: function(added) {
+			var o = {};
+			$.each($.parseJSON(added), function(key, value) {
+			   if (o[this.name]) {
+			       if (!o[this.name].push) {
+			           o[this.name] = [o[this.name]];
+			       }
+			       o[this.name].push(this.value || '');
+			   } else {
+			       o[this.name] = this.value || '';
+			   }
+			});
+
+			this.productsList.push(o);
+			main.preview();
 		},
 		editProduct: function(id, edited) {
 			console.log("edit", id, edited);
-
 		},
 		deleteProduct: function(id) {
 			var self = this;
