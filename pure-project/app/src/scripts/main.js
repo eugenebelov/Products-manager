@@ -12,14 +12,28 @@ $(function(){
 	});
 
 	window.productModel = {
-		view:function(context){
+		view: function(context){
 
 		},
-		onSaveEdit:function(id, context){
-			Products.edit(id, JSON.stringify(context));
+		onAddProduct: function(){
+			Products.addProduct();
 		},
-		onEdit:function(id){
+		onSaveEdit: function(id, context){
+			Products.editProduct(id, JSON.stringify(context));
+		},
+		onEdit: function(id){
 			Hash.setParam("page=edit",'id',id);
+		},
+		onRemove: function(id){
+			Products.deleteProduct(id);
+		},
+		cancel: function() {
+			Hash.remove("page");
+			Hash.remove("id");
+			Hash.set("page", "preview");
+		},
+		export: function() {
+			console.log(Products.get());
 		}
 	};
 
@@ -35,6 +49,7 @@ $(function(){
 		edit:function () {
 			var id = Hash.get('id');
 			var data = Products.getById(id);
+			
 			Views.render('edit-product-tpl', [data], ["title", "sku", "price"]);
 		}
 	}
@@ -49,9 +64,7 @@ $(function(){
 			})
 			.done(function( html ) {
 				tpl = html;
-				if(callback)
-					callback(html);
-
+				if(callback) callback(html);
 			});
 			return tpl;
 		},
@@ -80,8 +93,24 @@ $(function(){
 
 	var Products = {
 		path:"src/scripts/fake/data.json",
-		edit: function(id, edited) {
-			console.log(id, edited);
+		addProduct: function(id, edited) {
+			console.log("add", id, edited);
+			
+		},
+		editProduct: function(id, edited) {
+			console.log("edit", id, edited);
+
+		},
+		deleteProduct: function(id) {
+			var self = this;
+			$.each(this.get(), function(index, obj) {
+				if(obj.sku == id) {
+					self.productsList.splice(index, 1);
+					return false;
+				}
+			});
+
+			main.preview();
 		},
 		getById: function(id) {
 			var result = {};
@@ -106,7 +135,7 @@ $(function(){
 					self.productsList = data.products;
 				});
 			}
-			return self.productsList;
+			return $.makeArray(self.productsList);
 		}
 	};
 
