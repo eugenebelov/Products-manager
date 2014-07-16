@@ -2,7 +2,10 @@
   "name": "modern-project",
   "private": true,
   "dependencies": {
-    "jquery": "~1.10.2"
+    "jquery": "latest",
+    "backbone": "latest",
+    "marionette": "latest",
+    "requirejs": "latest"
   },
   "devDependencies": {}
 }
