@@ -36,7 +36,10 @@ $(function(){
 			Hash.set("page", "preview");
 		},
 		export: function() {
-			console.log(Products.get());
+			$("#viewExported").append($.parseHTML("<b>Parsed</b><br/>"));
+			$("#viewExported").append(JSON.stringify(Products.get()));
+
+			// console.log(Products.get());
 		}
 	};
 
