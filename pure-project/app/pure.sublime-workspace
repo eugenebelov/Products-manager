@@ -169,6 +169,14 @@
 				"line_ending": "Unix",
 				"name": "add-product-tpl.html"
 			}
+		},
+		{
+			"file": "src/scripts/templates/product-list-tpl.html",
+			"settings":
+			{
+				"buffer_size": 234,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -295,7 +303,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -381,7 +389,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -666,6 +674,34 @@
 						"settings":
 						{
 							"auto_name": "add-product-tpl.html",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/scripts/templates/product-list-tpl.html",
+					"settings":
+					{
+						"buffer_size": 234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								179,
+								198
+							]
+						],
+						"settings":
+						{
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true

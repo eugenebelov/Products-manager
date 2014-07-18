@@ -18,30 +18,116 @@
         <link rel="stylesheet" href="styles/libs/bootstrap/bootstrap.css">
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
+
+        <script type="text/template" id="product-add-item">
+            <form id="addForm" class="form-horizontal">
+              <div class="form-group">
+                <label for="inputTitle" class="col-sm-1 control-label">Title</label>
+                <div class="col-sm-10">
+                  <input type="text" name="title" id="inputTitle" class="form-control" placeholder="title" value="New product"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputSku" class="col-sm-1 control-label">Sku</label>
+                <div class="col-sm-10">
+                  <input type="text" name="sku" id="inputSku" class="form-control" placeholder="sku" value="123" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputPrice" class="col-sm-1 control-label">Price</label>
+                <div class="col-sm-10">
+                  <input type="text" name="price" id="inputPrice" class="form-control" placeholder="price" value="99.98"/>
+                </div>
+              </div>
+            </form>
+            <div class="actions pull-right">
+                <div class="btn btn-primary" onclick="productModel.onSaveAdd($('#addForm').serializeArray())">Add</div>
+                <div class="btn btn-warning" onclick="productModel.cancel()">Cancel</div>
+            </div>
+        </script>
+
+        <script type="text/template" id="product-edit-item">
+            <form id="editForm" class="form-horizontal">
+              <div class="form-group">
+                <label for="inputTitle" class="col-sm-1 control-label">Title</label>
+                <div class="col-sm-10">
+                  <input type="text" name="title" id="inputTitle" class="form-control" placeholder="title" value="<%=title %>"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputSku" class="col-sm-1 control-label">Sku</label>
+                <div class="col-sm-10">
+                  <input type="text" name="sku" id="inputSku" class="form-control" placeholder="sku" value="<%=sku %>" disabled/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputPrice" class="col-sm-1 control-label">Price</label>
+                <div class="col-sm-10">
+                  <input type="text" name="price" id="inputPrice" class="form-control" placeholder="price" value="<%=price %>"/>
+                </div>
+              </div>
+            </form>
+            <div class="actions pull-right">
+                <div class="btn btn-primary" onclick="productModel.onSaveEdit(<%=sku%>, $('#editForm').serializeArray())">Save changes</div>
+                <div class="btn btn-warning" onclick="productModel.cancel()">Cancel</div>
+            </div>
+        </script>
+        
+        <!-- product list item template -->
+        <script type="text/template" id="product-list-template">
+            
+              <td><%=title %></td>
+              <td><%=sku %></td>
+              <td>$<%=price %></td>
+              <td class="actions">
+                  <div class="btn btn-primary" onclick="productModel.onEdit(<%=sku %>)">edit</div>
+                  <div class="btn
+ btn-warning" onclick="productModel.onRemove(<%=sku %>)">delete</div>
+              </td>
+            
+        </script>
+
+        <!-- product list main template -->
+        <script type="text/template" id="product-list-body-template">
+            
+              <thead>
+                <tr>
+                  <th>Title</th><th>Sku</th><th>Price</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body"></tbody>
+            
+        </script>
+
     </head>
     <body>
-    <div class="main">
-        <div class="col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Products manager</h3>
+        <div class="main">
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Products manager</h3>
+                    </div>
+                    <div class="btn-group">
+                        <div class="btn btn-primary btn-sm" onclick="productModel.export()">Export to JSON</div>
+                        <div class="btn btn-primary btn-sm" onclick="productModel.onAddProduct()">Add product</div>
+                    </div>
+                    <div id="view" class="panel-body"></div>
+
                 </div>
-                <div class="btn-group">
-                    <div class="btn btn-primary btn-sm" onclick="productModel.export()">Export to JSON</div>
-                    <div class="btn btn-primary btn-sm" onclick="productModel.onAddProduct()">Add product</div>
-                </div>
-                <div id="view" class="panel-body"></div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Exported JSON</h3>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Exported JSON</h3>
+                    </div>
+                    <div id="viewExported" class="panel-body"></div>
                 </div>
-                <div id="viewExported" class="panel-body"></div>
             </div>
-        </div>
-    </div>  
+        </div>  
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
@@ -54,6 +140,9 @@
         <!-- endbuild -->
 
         <!-- build:js scripts/main.js -->
+        <!-- <script src="scripts/model.js"></script> -->
+        <!-- <script src="scripts/views.js"></script> -->
+        <!-- <script src="scripts/controller.js"></script> -->
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
