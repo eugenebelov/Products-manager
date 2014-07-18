@@ -1,14 +1,15 @@
 $(function(){
 	$(window).ready(function() {
-		 Hash.set("page", "preview");
+		Hash.remove("page");
+		Hash.set("page", "preview");
 	});
 
 	$(window).on('hashchange', function() {
 		var page = Hash.get("page");
-	  	if(main[page]) 
-	  		main[page]();
+	  	if(router[page]) 
+	  		router[page]();
 	  	else 
-	  		main.index();
+	  		router.index();
 	});
 
 	window.productModel = {
@@ -24,6 +25,8 @@ $(function(){
 		},
 		onSaveEdit: function(id, context){
 			Products.editProduct(id, JSON.stringify(context));
+			Hash.remove("id");
+			Hash.set("page", "preview");
 		},
 		onEdit: function(id){
 			Hash.setParam("page=edit",'id',id);
@@ -38,14 +41,12 @@ $(function(){
 		export: function() {
 			$("#viewExported").append($.parseHTML("<b>Parsed</b><br/>"));
 			$("#viewExported").append(JSON.stringify(Products.get()));
-
-			// console.log(Products.get());
 		}
 	};
 
-	var main = {
+	var router = {
 		index: function () {
-			main.preview();
+			router.preview();
 		},
 		preview:function () {
 			var data = Products.get();
@@ -78,7 +79,6 @@ $(function(){
 		},
 		render: function(name, data, params){
 			var html = Views.parseTemplate(name, data, params);
-			//console.log(html)
 			$('#view').html(html);
 
 		},
@@ -117,10 +117,24 @@ $(function(){
 			});
 
 			this.productsList.push(o);
-			main.preview();
+			router.preview();
 		},
 		editProduct: function(id, edited) {
-			console.log("edit", id, edited);
+			var o = {};
+			$.each($.parseJSON(edited), function(key, value) {
+				o[this.name] = this.value;
+			});
+
+			$.each(this.productsList, function(index, obj) {
+				if(obj.sku == id) {
+					$.each(obj, function(key, value) {
+						if(o[key])
+							obj[key] = o[key];
+					});
+				}
+			});
+
+			router.preview();
 		},
 		deleteProduct: function(id) {
 			var self = this;
@@ -131,7 +145,7 @@ $(function(){
 				}
 			});
 
-			main.preview();
+			router.preview();
 		},
 		getById: function(id) {
 			var result = {};
