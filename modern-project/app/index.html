@@ -84,9 +84,8 @@
               <td><%=sku %></td>
               <td>$<%=price %></td>
               <td class="actions">
-                  <div class="btn btn-primary" onclick="productModel.onEdit(<%=sku %>)">edit</div>
-                  <div class="btn
- btn-warning" onclick="productModel.onRemove(<%=sku %>)">delete</div>
+                  <div class="btn btn-primary edit-product">edit</div>
+                  <div class="btn btn-warning remove-product">delete</div>
               </td>
             
         </script>
@@ -111,9 +110,9 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Products manager</h3>
                     </div>
-                    <div class="btn-group">
-                        <div class="btn btn-primary btn-sm" onclick="productModel.export()">Export to JSON</div>
-                        <div class="btn btn-primary btn-sm" onclick="productModel.onAddProduct()">Add product</div>
+                    <div class="btn-group" id="add-button-bar">
+                        <div class="btn btn-primary btn-sm export-json">Export to JSON</div>
+                        <div class="btn btn-primary btn-sm add-product">Add product</div>
                     </div>
                     <div id="view" class="panel-body"></div>
 
