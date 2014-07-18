@@ -1,6 +1,9 @@
 
 var ProductApp = new Backbone.Marionette.Application();
 
+var EventListener = {};
+_.extend(EventListener, Backbone.Events);
+
 ProductApp.addRegions({
 	productListRegion: "#view",
 	exportRegion: "#viewExported"
@@ -45,8 +48,19 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         },
         onExport:function(event) {
             console.log("onExport");
+            EventListener.trigger('onexport');
         }
 
+    });
+
+    module.ExportBooks = Marionette.ItemView.extend({
+        el:'#viewExported',
+        initialize: function() {
+            EventListener.bind('onexport', this.onExportHandler, this);
+        },
+        onExportHandler: function(event) {
+            console.log("Export part triggered", this.collection.toJSON());
+        }
     });
 
     /* definition for individual item view */
@@ -136,6 +150,7 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
                     bookCollection = new module.BookCollection(bookArray);
 	                var bookCollectionView = new module.BookCollectionView({collection: bookCollection});
                     var addprod = new module.AddBookItemView({collection:bookCollection});
+                    var exportprod = new module.ExportBooks({collection:bookCollection});
                     self.RegionOne.show(bookCollectionView);
 	            }
 	        });
