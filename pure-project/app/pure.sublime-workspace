@@ -4,52 +4,20 @@
 		"selected_items":
 		[
 			[
-				"s",
-				"stringify"
+				"products",
+				"productsList"
+			],
+			[
+				"pa",
+				"parseJSON  (function)"
+			],
+			[
+				"hash",
+				"hashchange"
 			],
 			[
 				"add",
-				"added"
-			],
-			[
-				"Add",
-				"addProduct"
-			],
-			[
-				"producs",
-				"productsList"
-			],
-			[
-				"pro",
-				"productsList"
-			],
-			[
-				"edit",
-				"editProduct"
-			],
-			[
-				"con",
-				"console"
-			],
-			[
-				"dele",
-				"deleteItem"
-			],
-			[
-				"l",
-				"log"
-			],
-			[
-				"get",
-				"getById"
-			],
-			[
-				"h",
-				"htmlItems"
-			],
-			[
-				"produc",
-				"product-list-tpl"
+				"addClass  (function)"
 			],
 			[
 				"back",
@@ -58,10 +26,6 @@
 			[
 				"val",
 				"value	AngularJS"
-			],
-			[
-				"pa",
-				"$parent	AngularJS"
 			],
 			[
 				"fun",
@@ -135,48 +99,6 @@
 				"line_ending": "Unix",
 				"name": "index.html"
 			}
-		},
-		{
-			"file": "src/scripts/main.js",
-			"settings":
-			{
-				"buffer_size": 3666,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/scripts/templates/product-list-item-tpl.html",
-			"settings":
-			{
-				"buffer_size": 277,
-				"line_ending": "Unix",
-				"name": "<tr>"
-			}
-		},
-		{
-			"file": "src/scripts/templates/edit-product-tpl.html",
-			"settings":
-			{
-				"buffer_size": 1087,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/scripts/templates/add-product-tpl.html",
-			"settings":
-			{
-				"buffer_size": 1052,
-				"line_ending": "Unix",
-				"name": "add-product-tpl.html"
-			}
-		},
-		{
-			"file": "src/scripts/templates/product-list-tpl.html",
-			"settings":
-			{
-				"buffer_size": 234,
-				"line_ending": "Unix"
-			}
 		}
 	],
 	"build_system": "",
@@ -185,6 +107,10 @@
 		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"Snippet: ",
+				"Snippet: if … else"
+			],
 			[
 				"In",
 				"Package Control: Install Package"
@@ -230,7 +156,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 575.0
+		"width": 602.0
 	},
 	"console":
 	{
@@ -247,13 +173,21 @@
 	},
 	"file_history":
 	[
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/scripts/hash.js",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/scripts/templates/edit-product-tpl.html",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/styles/styles.css",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/scripts/fake/data.json",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/edit/index.html",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/scripts/templates/product-list-tpl.html",
-		"/PROJECTS/HTML-Projects/Products-manager/pure-project/app/src/main.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/main.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/templates/edit-product-tpl.html",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/hash.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/router.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/fake/data.json",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/templates/list.html",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/router-ck.js",
+		"/Users/limestore/Library/Application Support/Sublime Text 2/Packages/User/log",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/templates/productTableTemplate.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/fake/data.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/styles/styles.css",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/edit/index.html",
+		"/Users/limestore/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/scripts/libs/jquery.js",
+		"/Users/limestore/Sites/web/Products-manager/pure-project/app/src/main.js",
 		"/Users/limestore/Sites/web/Web-app-store/app/views/modals/finishCheckoutPopup.html",
 		"/Users/limestore/Sites/web/Web-app-store/app/scripts/data/products.json",
 		"/Users/limestore/Sites/web/Web-app-store/app/scripts/data/products-in-cart.json",
@@ -311,24 +245,30 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
-			"a",
+			"setParam",
+			"productModel.cancel",
+			"cancel",
+			"main",
+			"onAddProduct",
+			"preview",
+			"editProduct",
 			"addProduct",
-			"getView",
-			"addProduct",
-			"<div class=\"btn btn-primary btn-sm\" onclick=\"productModel.export()\">Export to JSON</div>",
-			">\n",
-			"\n			",
-			"productsList",
-			"view",
-			"getById",
-			"Title",
-			"edit",
-			"],",
-			"get",
-			"console",
+			"applayTemplate",
+			"path",
+			"productsPath",
+			"SITE_DIR",
+			"'",
+			"this.url",
+			"data",
+			"<script type=\"text/javascript\" src=\"http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.",
+			"context",
+			"window.$",
+			"$",
+			"products",
+			"main",
 			"bemybox",
 			"font-size",
 			"label",
@@ -383,13 +323,13 @@
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": true,
+		"whole_word": false,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -404,8 +344,8 @@
 						"selection":
 						[
 							[
-								1146,
-								1146
+								345,
+								345
 							]
 						],
 						"settings":
@@ -572,152 +512,13 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/scripts/main.js",
-					"settings":
-					{
-						"buffer_size": 3666,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								855,
-								855
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 206.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/scripts/templates/product-list-item-tpl.html",
-					"settings":
-					{
-						"buffer_size": 277,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								249,
-								249
-							]
-						],
-						"settings":
-						{
-							"auto_name": "<tr>",
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/scripts/templates/edit-product-tpl.html",
-					"settings":
-					{
-						"buffer_size": 1087,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								995,
-								995
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/scripts/templates/add-product-tpl.html",
-					"settings":
-					{
-						"buffer_size": 1052,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1033,
-								1033
-							]
-						],
-						"settings":
-						{
-							"auto_name": "add-product-tpl.html",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/scripts/templates/product-list-tpl.html",
-					"settings":
-					{
-						"buffer_size": 234,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								179,
-								198
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
 				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 0.0
 	},
 	"input":
 	{
@@ -775,6 +576,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 238.0,
+	"side_bar_width": 213.0,
 	"status_bar_visible": true
 }

@@ -84,33 +84,17 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
             into which to be rendered. */
         onRender: function() {
             console.log('main layout: onRender');
-             
-            /* create an array of books using anonymouse objects;
-                the objects have the same structure as in the 'defaults'
-                attribute of the module.BookModel definition */
-            var bookArray = [];
-
-            // bookArray.push({title: 'Wolf',sku: 'Harrison', price: 'Jim'});
-            // bookArray.push({title: 'The Theory and Practice of Rivers', sku: 'Snyder', price: 'Gary'});
-            // bookArray.push({title: 'Weather Central',sku: 'Kooser', price: 'Ted'});
-            // bookArray.push({title: 'Losing Season',sku: 'Ridl', price: 'Jack'});
-            // bookArray.push({title: 'Mornings Like This',sku: 'Dillard', price: 'Annie'});
- 
-            /* create a collection using the array of anonymous objects */
-            var bookCollection = new module.BookCollection(bookArray);
+            var self = this;
             
+            var bookCollection = new module.BookCollection();
             bookCollection.fetch({
 	            success: function (prod) {
-	                bookArray = _.clone(bookCollection.models[0].attributes.products);
-	                console.log(bookCollection);
+                    var bookArray = _.clone(bookCollection.models[0].attributes.products);
+                    bookCollection = new module.BookCollection(bookArray);
+	                var bookCollectionView = new module.BookCollectionView({collection: bookCollection});
+                    self.RegionOne.show(bookCollectionView);
 	            }
 	        });
- 
-            /* create new instance of the collection view using the bookCollection */
-            var bookCollectionView = new module.BookCollectionView({collection: bookCollection});
- 
-            /* display the collection view in region 1 */
-            this.RegionOne.show(bookCollectionView);
         },
  
         /* called when the view displays in the UI */
