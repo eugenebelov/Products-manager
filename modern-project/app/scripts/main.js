@@ -1,3 +1,4 @@
+
 var ProductApp = new Backbone.Marionette.Application();
 
 ProductApp.addRegions({
@@ -128,3 +129,4 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
 });
 
 $(document).ready(function() {ProductApp.start();});
+
