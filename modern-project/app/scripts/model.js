@@ -1,13 +1,20 @@
-var Product = Backbone.Model.extend({
-defaults: {
-        title: "Title",
-        sku: "11",
-        price: "199.99"
-    }
-});
+/* definition for book model, with default example of data structure */
+    module.BookModel = Backbone.Model.extend({
+        defaults: {
+            title: '',
+            sku: '',
+            price: ''
+        }
+    });
+ 
+    /* definition for book collection */
+    module.BookCollection = Backbone.Collection.extend({
+         
+        /* set model type used for this collection */
+        model: module.BookModel,
+ 
+        /* comparator determines how collection is sorted */
+        comparator: 'authorLast',
 
-var ProductsCollection = Backbone.Collection.extend({
-    model: Product,
-
-    url: 'scripts/fake/data.json'
-});
+        url: 'scripts/fake/data.json'
+    });

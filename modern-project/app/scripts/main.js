@@ -1,6 +1,8 @@
 
 var ProductApp = new Backbone.Marionette.Application();
 
+var bookCollection = {};
+var Router = {};
 var EventListener = {};
 _.extend(EventListener, Backbone.Events);
 
@@ -9,24 +11,43 @@ ProductApp.addRegions({
 	exportRegion: "#viewExported"
 });
 
-// var productController = new ProductController();
-// productController.AddProductList({region: ProductApp.productListRegion});
-
-ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _) {
-	/* definition for book model, with default example of data structure */
-    module.BookModel = Backbone.Model.extend({
+// ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _) {
+    ProductApp.BookModel = Backbone.Model.extend({
         defaults: {
             title: '',
             sku: '',
             price: ''
         }
     });
+
+    ProductApp.ProductsRouter = Backbone.Router.extend({
+        routes : {
+            'home'  : 'home',
+            'add'   : 'add',
+            'edit'  : 'edit'
+        },
+        home : function() {
+            this.loadView(new ProductApp.BookCollectionView({collection:bookCollection}));
+            console.log("router - home");
+        },
+        add : function() {
+            this.loadView(new ProductApp.AddProductFormView({collection:bookCollection}));
+            // console.log("router - add");
+        },
+        edit : function() {
+            // this.loadView(new UsersView());
+            console.log("router - edit");
+        },
+        loadView : function(view) {
+            this.view && (this.view.close ? this.view.close() : this.view.remove());
+            this.view = view;
+        }
+    });
  
-    /* definition for book collection */
-    module.BookCollection = Backbone.Collection.extend({
+    ProductApp.BookCollection = Backbone.Collection.extend({
          
         /* set model type used for this collection */
-        model: module.BookModel,
+        model: ProductApp.BookModel,
  
         /* comparator determines how collection is sorted */
         comparator: 'authorLast',
@@ -34,26 +55,47 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         url: 'scripts/fake/data.json'
     });
  
-    module.AddBookItemView = Marionette.ItemView.extend({
+    ProductApp.AddProductFormView = Marionette.ItemView.extend({
+        template: _.template($('#product-add-item').html()),
+        events: {
+            'click .btn.add-product': 'onCreateProduct',
+            'click .btn.cancel-add': 'onCancel'
+        },
+        initialize: function() {
+            $("#view").html(this.el);
+            this.render();
+        },
+        onCreateProduct:function(event) {
+            var prod = new ProductApp.BookModel({title:'new prod', sku:'999', price:'1mln'});
+            this.collection.add(prod);
+
+            Router.navigate("home", {trigger: true, replace: true});
+        },
+        onCancel:function(event) {
+            Router.navigate("home", {trigger: true, replace: true});
+        }
+    });
+
+    ProductApp.AddBookItemView = Marionette.ItemView.extend({
         el:'#add-button-bar',
         events: {
-            'click .add-product': 'onAddProduct',
-            'click .export-json': 'onExport'
+            'click .btn.show-add-product': 'onAddProduct',
+            'click .btn.show-export-json': 'onExport'
         },
 
         onAddProduct:function(event) {
-            console.log("onAdd");
-            var prod = new module.BookModel({title:'new prod', sku:'999', price:'1mln'});
-            this.collection.add(prod);
+            Router.navigate("add", {trigger: true, replace: true});
+
+            // var prod = new ProductApp.BookModel({title:'new prod', sku:'999', price:'1mln'});
+            // this.collection.add(prod);
         },
         onExport:function(event) {
             console.log("onExport");
             EventListener.trigger('onexport');
         }
-
     });
 
-    module.ExportBooks = Marionette.ItemView.extend({
+    ProductApp.ExportBooks = Marionette.ItemView.extend({
         el:'#viewExported',
         initialize: function() {
             EventListener.bind('onexport', this.onExportHandler, this);
@@ -63,8 +105,7 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         }
     });
 
-    /* definition for individual item view */
-    module.BookItemView = Marionette.ItemView.extend({
+    ProductApp.BookItemView = Marionette.ItemView.extend({
         tagName: 'tr',
  
         /* set the template used to display this view */
@@ -76,7 +117,8 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         },
 
         onEditProductClick: function(event) {
-            console.log("edit", this.model.get('sku'));
+            Router.navigate("edit", {trigger: true, replace: true});
+            // console.log("edit", this.model.get('sku'));
         },
 
         onRemoveProductClick: function(event) {
@@ -91,8 +133,8 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
 
             console.log('BookItemView: initialize >>> ' + this.model.get('title')) 
         },
-        onRender: function(){ console.log('BookItemView: onRender >>> ' + this.model.get('title')) },
-        onShow: function(){ console.log('BookItemView: onShow >>> ' + this.model.get('title')) },
+        // onRender: function(){ console.log('BookItemView: onRender >>> ' + this.model.get('title')) },
+        // onShow: function(){ console.log('BookItemView: onShow >>> ' + this.model.get('title')) },
         remove: function(){ 
             this.$el.remove() 
         },
@@ -102,19 +144,17 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         }
     });
  
-    /* definition for collection view */
-    module.BookCollectionView = Marionette.CollectionView.extend({
+    ProductApp.BookCollectionView = Marionette.CollectionView.extend({
         tagName: "tbody",
         /* explicitly set the itemview used to display the models in this collection */
-        childView: module.BookItemView,
+        childView: ProductApp.BookItemView,
  
-        initialize: function(){ console.log('BookCollectionView: initialize') },
-        onRender: function(){ console.log('BookCollectionView: onRender') },
-        onShow: function(){ console.log('BookCollectionView: onShow') }
+        // initialize: function(){ console.log('BookCollectionView: initialize') },
+        // onRender: function(){ console.log('BookCollectionView: onRender') },
+        // onShow: function(){ console.log('BookCollectionView: onShow') }
     });
  
-    /* define a view; in this case a 'Layout' */
-    module.AppLayoutView = Backbone.Marionette.LayoutView.extend({
+    ProductApp.AppLayoutView = Backbone.Marionette.LayoutView.extend({
          
         /* the auto-generated element which contains this view */
         tagName: 'table',
@@ -143,14 +183,14 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
             console.log('main layout: onRender');
             var self = this;
             
-            var bookCollection = new module.BookCollection();
+            bookCollection = new ProductApp.BookCollection();
             bookCollection.fetch({
 	            success: function (prod) {
                     var bookArray = _.clone(bookCollection.models[0].attributes.products);
-                    bookCollection = new module.BookCollection(bookArray);
-	                var bookCollectionView = new module.BookCollectionView({collection: bookCollection});
-                    var addprod = new module.AddBookItemView({collection:bookCollection});
-                    var exportprod = new module.ExportBooks({collection:bookCollection});
+                    bookCollection = new ProductApp.BookCollection(bookArray);
+	                var bookCollectionView = new ProductApp.BookCollectionView({collection: bookCollection});
+                    var addprod = new ProductApp.AddBookItemView({collection:bookCollection});
+                    var exportprod = new ProductApp.ExportBooks({collection:bookCollection});
                     self.RegionOne.show(bookCollectionView);
 	            }
 	        });
@@ -162,14 +202,16 @@ ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _
         }
     });
 
-	module.addInitializer(function(){
-        /* create a new instance of the layout from the module */
-        var layout = new module.AppLayoutView();
+	ProductApp.addInitializer(function(){
+        Router = new ProductApp.ProductsRouter();
+        var layout = new ProductApp.AppLayoutView();
+
+        Backbone.history.start();
 
         /* display the layout in the region defined at the top of this file */
         ProductApp.productListRegion.show(layout);
     });
-});
+// });
 
-$(document).ready(function() {ProductApp.start();});
+$(document).ready(function() { ProductApp.start(); });
 
