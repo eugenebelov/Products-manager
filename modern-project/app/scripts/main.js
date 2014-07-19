@@ -24,19 +24,19 @@ ProductApp.addRegions({
         routes : {
             'home'  : 'home',
             'add'   : 'add',
-            'edit'  : 'edit'
+            'edit/:sku'  : 'edit'
         },
         home : function() {
-            this.loadView(new ProductApp.BookCollectionView({collection:bookCollection}));
+            // ProductApp.productListRegion.show(new ProductApp.BookCollectionView({collection: bookCollection}));
+            // this.loadView(new ProductApp.BookCollectionView({collection:bookCollection}));
+            ProductApp.productListRegion.show(new ProductApp.AppLayoutView());
             console.log("router - home");
         },
         add : function() {
             this.loadView(new ProductApp.AddProductFormView({collection:bookCollection}));
-            // console.log("router - add");
         },
-        edit : function() {
-            // this.loadView(new UsersView());
-            console.log("router - edit");
+        edit : function(id) {
+            this.loadView(new ProductApp.EditProductFormView({collection:bookCollection, sku:id}));
         },
         loadView : function(view) {
             this.view && (this.view.close ? this.view.close() : this.view.remove());
@@ -55,6 +55,41 @@ ProductApp.addRegions({
         url: 'scripts/fake/data.json'
     });
  
+    ProductApp.EditProductFormView = Marionette.ItemView.extend({
+        template: _.template($('#product-edit-item').html()),
+        events: {
+            'click .btn.edit-product': 'onEditProduct',
+            'click .btn.cancel-edit': 'onCancel'
+        },
+        initialize: function() {
+            $("#view").html(this.el);
+            this.render();
+        },
+        onEditProduct:function(event) {
+            // var formData = JSON.stringify(this.$el.find('form').serializeArray());
+            // var o = {};
+            // $.each($.parseJSON(formData), function(key, value) {
+            //    if (o[this.name]) {
+            //        if (!o[this.name].push) {
+            //            o[this.name] = [o[this.name]];
+            //        }
+            //        o[this.name].push(this.value || '');
+            //    } else {
+            //        o[this.name] = this.value || '';
+            //    }
+            // });
+            // var prod = new ProductApp.BookModel(o);
+            // this.collection.add(prod);
+
+            // Router.navigate("home", {trigger: true, replace: true});
+
+            console.log(this.sku);
+        },
+        onCancel:function(event) {
+            // Router.navigate("home", {trigger: true, replace: true});
+        }
+    });
+
     ProductApp.AddProductFormView = Marionette.ItemView.extend({
         template: _.template($('#product-add-item').html()),
         events: {
@@ -66,7 +101,19 @@ ProductApp.addRegions({
             this.render();
         },
         onCreateProduct:function(event) {
-            var prod = new ProductApp.BookModel({title:'new prod', sku:'999', price:'1mln'});
+            var formData = JSON.stringify(this.$el.find('form').serializeArray());
+            var o = {};
+            $.each($.parseJSON(formData), function(key, value) {
+               if (o[this.name]) {
+                   if (!o[this.name].push) {
+                       o[this.name] = [o[this.name]];
+                   }
+                   o[this.name].push(this.value || '');
+               } else {
+                   o[this.name] = this.value || '';
+               }
+            });
+            var prod = new ProductApp.BookModel(o);
             this.collection.add(prod);
 
             Router.navigate("home", {trigger: true, replace: true});
@@ -85,12 +132,8 @@ ProductApp.addRegions({
 
         onAddProduct:function(event) {
             Router.navigate("add", {trigger: true, replace: true});
-
-            // var prod = new ProductApp.BookModel({title:'new prod', sku:'999', price:'1mln'});
-            // this.collection.add(prod);
         },
         onExport:function(event) {
-            console.log("onExport");
             EventListener.trigger('onexport');
         }
     });
@@ -117,7 +160,7 @@ ProductApp.addRegions({
         },
 
         onEditProductClick: function(event) {
-            Router.navigate("edit", {trigger: true, replace: true});
+            Router.navigate("edit/"+this.model.get('sku'), {trigger: true, replace: true});
             // console.log("edit", this.model.get('sku'));
         },
 
@@ -131,7 +174,7 @@ ProductApp.addRegions({
             this.model.on('change', this.render, this);
             this.model.on('destroy', this.remove, this);
 
-            console.log('BookItemView: initialize >>> ' + this.model.get('title')) 
+            // console.log('BookItemView: initialize >>> ' + this.model.get('title')) 
         },
         // onRender: function(){ console.log('BookItemView: onRender >>> ' + this.model.get('title')) },
         // onShow: function(){ console.log('BookItemView: onShow >>> ' + this.model.get('title')) },
@@ -153,6 +196,7 @@ ProductApp.addRegions({
         // initialize: function(){ },
         // onRender: function(){ },
         onShow: function(){ 
+            console.log("BookCollectionView on Show");
             $('#collection-body').contents().unwrap();
         }
     });
@@ -186,29 +230,42 @@ ProductApp.addRegions({
             console.log('main layout: onRender');
             var self = this;
             
-            bookCollection = new ProductApp.BookCollection();
-            bookCollection.fetch({
-	            success: function (prod) {
-                    var bookArray = _.clone(bookCollection.models[0].attributes.products);
-                    bookCollection = new ProductApp.BookCollection(bookArray);
-	                var bookCollectionView = new ProductApp.BookCollectionView({collection: bookCollection});
-                    var addprod = new ProductApp.AddBookItemView({collection:bookCollection});
-                    var exportprod = new ProductApp.ExportBooks({collection:bookCollection});
-                    self.RegionOne.show(bookCollectionView);
-	            }
-	        });
+            if( !bookCollection.models )
+            {
+                bookCollection = new ProductApp.BookCollection();
+                bookCollection.fetch({
+                    success: function (prod) {
+                        var bookArray = _.clone(bookCollection.models[0].attributes.products);
+                        bookCollection = new ProductApp.BookCollection(bookArray);
+                        var addprod = new ProductApp.AddBookItemView({collection:bookCollection});
+                        var exportprod = new ProductApp.ExportBooks({collection:bookCollection});
+                        
+                        self.showView(self);
+                    }
+                });
+            } 
         },
- 
+
+        showView: function (context) {
+            var bookCollectionView = new ProductApp.BookCollectionView({collection: bookCollection});
+            context.RegionOne.show(bookCollectionView);
+        },
+
         /* called when the view displays in the UI */
         onShow: function() {
             console.log('main layout: onShow');
+
+            if( bookCollection.models )
+            {
+                this.showView(this);
+            }
         }
     });
 
 	ProductApp.addInitializer(function(){
         Router = new ProductApp.ProductsRouter();
         var layout = new ProductApp.AppLayoutView();
-
+        
         Backbone.history.start();
 
         /* display the layout in the region defined at the top of this file */
