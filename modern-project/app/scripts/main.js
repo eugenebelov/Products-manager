@@ -146,12 +146,15 @@ ProductApp.addRegions({
  
     ProductApp.BookCollectionView = Marionette.CollectionView.extend({
         tagName: "tbody",
+        id: "collection-body",
         /* explicitly set the itemview used to display the models in this collection */
         childView: ProductApp.BookItemView,
  
-        // initialize: function(){ console.log('BookCollectionView: initialize') },
-        // onRender: function(){ console.log('BookCollectionView: onRender') },
-        // onShow: function(){ console.log('BookCollectionView: onShow') }
+        // initialize: function(){ },
+        // onRender: function(){ },
+        onShow: function(){ 
+            $('#collection-body').contents().unwrap();
+        }
     });
  
     ProductApp.AppLayoutView = Backbone.Marionette.LayoutView.extend({
