@@ -8,3 +8,6 @@ This project created using <br />
 *modern - Backbone + Marionette + Handlebars + RequireJS <br />
 
 God save us....
+
+
+Use this to break all to modules -> http://backbonetutorials.com/organizing-backbone-using-modules/
