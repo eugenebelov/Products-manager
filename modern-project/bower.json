@@ -5,8 +5,7 @@
     "jquery": "latest",
     "backbone": "latest",
     "marionette": "latest",
-    "requirejs": "latest",
-    "handlebars.js": "latest"
+    "requirejs": "latest"
   },
   "devDependencies": {}
 }

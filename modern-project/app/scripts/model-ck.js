@@ -1,1 +1,0 @@
-/* definition for book model, with default example of data structure */module.BookModel=Backbone.Model.extend({defaults:{title:"",sku:"",price:""}});module.BookCollection=Backbone.Collection.extend({model:module.BookModel,comparator:"authorLast",url:"scripts/fake/data.json"});

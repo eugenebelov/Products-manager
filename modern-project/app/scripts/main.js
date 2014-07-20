@@ -1,36 +1,37 @@
 'use strict';
 
-var ProductApp = new Backbone.Marionette.Application();
+require(['model', 'controller', 'views', 'router'], function(){
 
-var productsCollection = {};
-var Router = {};
-var EventListener = {};
-_.extend(EventListener, Backbone.Events);
+    var ProductApp = new Backbone.Marionette.Application();
 
-Handlebars.getTemplate = function(name) {
-    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
-        $.ajax({
-            url : './scripts/templates/' + name + '.hbs',
-            datatype: 'text/javascript',
-            success : function(response, status, jqXHR) {
-                if (Handlebars.templates === undefined) {
-                    Handlebars.templates = {};
-                }
-                //Handlebars.templates[name] = Handlebars.compile(jqXHR.responseText);
-                Handlebars.templates[name] = Handlebars.compile(response);
-            },
-            async : false
-        });
-    }
-    return Handlebars.templates[name];
-};
+    var productsCollection = {};
+    var Router = {};
+    var EventListener = {};
+    _.extend(EventListener, Backbone.Events);
 
-ProductApp.addRegions({
-	productListRegion: "#view",
-	exportRegion: "#viewExported"
-});
+    Handlebars.getTemplate = function(name) {
+        if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+            $.ajax({
+                url : './scripts/templates/' + name + '.hbs',
+                datatype: 'text/javascript',
+                success : function(response, status, jqXHR) {
+                    if (Handlebars.templates === undefined) {
+                        Handlebars.templates = {};
+                    }
+                    Handlebars.templates[name] = Handlebars.compile(response);
+                },
+                async : false
+            });
+        }
+        return Handlebars.templates[name];
+    };
 
-// ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _) {
+    ProductApp.addRegions({
+        productListRegion: "#view",
+        exportRegion: "#viewExported"
+    });
+
+
     ProductApp.ProductsModel = Backbone.Model.extend({
         defaults: {
             title: '',
@@ -39,34 +40,12 @@ ProductApp.addRegions({
         }
     });
 
-    ProductApp.ProductsRouter = Backbone.Router.extend({
-        routes : {
-            'home'  : 'home',
-            'add'   : 'add',
-            'edit/:sku'  : 'edit'
-        },
-        home : function() {
-            ProductApp.productListRegion.show(new ProductApp.AppLayoutView());
-            // this.loadView(new ProductApp.ProductsCollectionView({collection: productsCollection}));
-        },
-        add : function() {
-            this.loadView(new ProductApp.AddProductFormView({collection:productsCollection}));
-        },
-        edit : function(id) {
-            this.loadView(new ProductApp.EditProductFormView({collection:productsCollection, model: productsCollection.where({sku:id})[0]}));
-        },
-        loadView : function(view) {
-            this.view && (this.view.close ? this.view.close() : this.view.remove());
-            this.view = view;
-        }
-    });
- 
     ProductApp.ProductsCollection = Backbone.Collection.extend({
         model: ProductApp.ProductsModel,
         comparator: 'authorLast',
         url: 'scripts/fake/data.json'
     });
- 
+
     ProductApp.EditProductFormView = Marionette.ItemView.extend({
         template: Handlebars.getTemplate("product-edit"),
         events: {
@@ -152,7 +131,7 @@ ProductApp.addRegions({
         }
     });
 
-    ProductApp.ExportProductss = Marionette.ItemView.extend({
+    ProductApp.ExportProducts = Marionette.ItemView.extend({
         el:'#viewExported',
         initialize: function() {
             EventListener.bind('onexport', this.onExportHandler, this);
@@ -166,7 +145,7 @@ ProductApp.addRegions({
 
     ProductApp.ProductsItemView = Marionette.ItemView.extend({
         tagName: 'tr',
- 
+
         template: Handlebars.getTemplate("product-list-item"),
 
         events: {
@@ -195,18 +174,18 @@ ProductApp.addRegions({
             return this;
         }
     });
- 
+
     ProductApp.ProductsCollectionView = Marionette.CollectionView.extend({
         tagName: "tbody",
         id: "collection-body", 
         childView: ProductApp.ProductsItemView,
- 
+
         onShow: function(){ 
             console.log("ProductsCollectionView on Show");
             $('#collection-body').contents().unwrap();
         }
     });
- 
+
     ProductApp.AppLayoutView = Backbone.Marionette.LayoutView.extend({
         tagName: 'table',
         id: 'products-table',
@@ -218,7 +197,7 @@ ProductApp.addRegions({
         initialize: function() {
             console.log('main layout: initialize');
         },
- 
+
         onRender: function() {
             console.log('main layout: onRender');
         },
@@ -241,7 +220,7 @@ ProductApp.addRegions({
                         productsCollection = new ProductApp.ProductsCollection(productsArray);
 
                         var addprod = new ProductApp.AddProductsItemView({collection:productsCollection});
-                        var exportprod = new ProductApp.ExportProductss({collection:productsCollection});
+                        var exportprod = new ProductApp.ExportProducts({collection:productsCollection});
                         
                         self.showProductsCollectionView(self);
                     }
@@ -254,7 +233,7 @@ ProductApp.addRegions({
         }
     });
 
-	ProductApp.addInitializer(function(){
+    ProductApp.addInitializer(function(){
         Router = new ProductApp.ProductsRouter();
         var layout = new ProductApp.AppLayoutView();
         
@@ -262,6 +241,7 @@ ProductApp.addRegions({
 
         ProductApp.productListRegion.show(layout);
     });
-// });
 
-$(document).ready(function() { ProductApp.start(); });
+    $(document).ready(function() { ProductApp.start(); });
+
+});
