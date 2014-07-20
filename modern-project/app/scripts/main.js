@@ -1,7 +1,7 @@
 
 var ProductApp = new Backbone.Marionette.Application();
 
-var bookCollection = {};
+var productsCollection = {};
 var Router = {};
 var EventListener = {};
 _.extend(EventListener, Backbone.Events);
@@ -12,7 +12,7 @@ ProductApp.addRegions({
 });
 
 // ProductApp.module('ProductApp', function(module, App, Backbone, Marionette, $, _) {
-    ProductApp.BookModel = Backbone.Model.extend({
+    ProductApp.ProductsModel = Backbone.Model.extend({
         defaults: {
             title: '',
             sku: '',
@@ -27,16 +27,14 @@ ProductApp.addRegions({
             'edit/:sku'  : 'edit'
         },
         home : function() {
-            // ProductApp.productListRegion.show(new ProductApp.BookCollectionView({collection: bookCollection}));
-            // this.loadView(new ProductApp.BookCollectionView({collection:bookCollection}));
             ProductApp.productListRegion.show(new ProductApp.AppLayoutView());
-            console.log("router - home");
+            // this.loadView(new ProductApp.ProductsCollectionView({collection: productsCollection}));
         },
         add : function() {
-            this.loadView(new ProductApp.AddProductFormView({collection:bookCollection}));
+            this.loadView(new ProductApp.AddProductFormView({collection:productsCollection}));
         },
         edit : function(id) {
-            this.loadView(new ProductApp.EditProductFormView({collection:bookCollection, sku:id}));
+            this.loadView(new ProductApp.EditProductFormView({collection:productsCollection, model: productsCollection.where({sku:id})[0]}));
         },
         loadView : function(view) {
             this.view && (this.view.close ? this.view.close() : this.view.remove());
@@ -44,10 +42,10 @@ ProductApp.addRegions({
         }
     });
  
-    ProductApp.BookCollection = Backbone.Collection.extend({
+    ProductApp.ProductsCollection = Backbone.Collection.extend({
          
         /* set model type used for this collection */
-        model: ProductApp.BookModel,
+        model: ProductApp.ProductsModel,
  
         /* comparator determines how collection is sorted */
         comparator: 'authorLast',
@@ -65,28 +63,30 @@ ProductApp.addRegions({
             $("#view").html(this.el);
             this.render();
         },
+        render: function() {
+            this.$el.html(this.template(this.options.model.attributes));
+            return this;
+        },
         onEditProduct:function(event) {
-            // var formData = JSON.stringify(this.$el.find('form').serializeArray());
-            // var o = {};
-            // $.each($.parseJSON(formData), function(key, value) {
-            //    if (o[this.name]) {
-            //        if (!o[this.name].push) {
-            //            o[this.name] = [o[this.name]];
-            //        }
-            //        o[this.name].push(this.value || '');
-            //    } else {
-            //        o[this.name] = this.value || '';
-            //    }
-            // });
-            // var prod = new ProductApp.BookModel(o);
-            // this.collection.add(prod);
+            var formData = JSON.stringify(this.$el.find('form').serializeArray());
+            var o = {};
+            $.each($.parseJSON(formData), function(key, value) {
+               if (o[this.name]) {
+                   if (!o[this.name].push) {
+                       o[this.name] = [o[this.name]];
+                   }
+                   o[this.name].push(this.value || '');
+               } else {
+                   o[this.name] = this.value || '';
+               }
+            });
 
-            // Router.navigate("home", {trigger: true, replace: true});
+            var model = this.options.model.set(o);
 
-            console.log(this.sku);
+            Router.navigate("home", {trigger: true, replace: true});
         },
         onCancel:function(event) {
-            // Router.navigate("home", {trigger: true, replace: true});
+            Router.navigate("home", {trigger: true, replace: true});
         }
     });
 
@@ -113,7 +113,7 @@ ProductApp.addRegions({
                    o[this.name] = this.value || '';
                }
             });
-            var prod = new ProductApp.BookModel(o);
+            var prod = new ProductApp.ProductsModel(o);
             this.collection.add(prod);
 
             Router.navigate("home", {trigger: true, replace: true});
@@ -123,7 +123,7 @@ ProductApp.addRegions({
         }
     });
 
-    ProductApp.AddBookItemView = Marionette.ItemView.extend({
+    ProductApp.AddProductsItemView = Marionette.ItemView.extend({
         el:'#add-button-bar',
         events: {
             'click .btn.show-add-product': 'onAddProduct',
@@ -138,17 +138,20 @@ ProductApp.addRegions({
         }
     });
 
-    ProductApp.ExportBooks = Marionette.ItemView.extend({
+    ProductApp.ExportProductss = Marionette.ItemView.extend({
         el:'#viewExported',
         initialize: function() {
             EventListener.bind('onexport', this.onExportHandler, this);
         },
         onExportHandler: function(event) {
             console.log("Export part triggered", this.collection.toJSON());
+            this.$el.empty()
+                    .append($.parseHTML("<b>Parsed</b><br/>"))
+                    .append(JSON.stringify(this.collection.toJSON()));
         }
     });
 
-    ProductApp.BookItemView = Marionette.ItemView.extend({
+    ProductApp.ProductsItemView = Marionette.ItemView.extend({
         tagName: 'tr',
  
         /* set the template used to display this view */
@@ -161,7 +164,6 @@ ProductApp.addRegions({
 
         onEditProductClick: function(event) {
             Router.navigate("edit/"+this.model.get('sku'), {trigger: true, replace: true});
-            // console.log("edit", this.model.get('sku'));
         },
 
         onRemoveProductClick: function(event) {
@@ -173,11 +175,9 @@ ProductApp.addRegions({
         initialize: function(){ 
             this.model.on('change', this.render, this);
             this.model.on('destroy', this.remove, this);
-
-            // console.log('BookItemView: initialize >>> ' + this.model.get('title')) 
         },
-        // onRender: function(){ console.log('BookItemView: onRender >>> ' + this.model.get('title')) },
-        // onShow: function(){ console.log('BookItemView: onShow >>> ' + this.model.get('title')) },
+        // onRender: function(){ console.log('ProductsItemView: onRender >>> ' + this.model.get('title')) },
+        // onShow: function(){ console.log('ProductsItemView: onShow >>> ' + this.model.get('title')) },
         remove: function(){ 
             this.$el.remove() 
         },
@@ -187,16 +187,16 @@ ProductApp.addRegions({
         }
     });
  
-    ProductApp.BookCollectionView = Marionette.CollectionView.extend({
+    ProductApp.ProductsCollectionView = Marionette.CollectionView.extend({
         tagName: "tbody",
         id: "collection-body",
         /* explicitly set the itemview used to display the models in this collection */
-        childView: ProductApp.BookItemView,
+        childView: ProductApp.ProductsItemView,
  
         // initialize: function(){ },
         // onRender: function(){ },
         onShow: function(){ 
-            console.log("BookCollectionView on Show");
+            console.log("ProductsCollectionView on Show");
             $('#collection-body').contents().unwrap();
         }
     });
@@ -228,36 +228,37 @@ ProductApp.addRegions({
             into which to be rendered. */
         onRender: function() {
             console.log('main layout: onRender');
-            var self = this;
-            
-            if( !bookCollection.models )
-            {
-                bookCollection = new ProductApp.BookCollection();
-                bookCollection.fetch({
-                    success: function (prod) {
-                        var bookArray = _.clone(bookCollection.models[0].attributes.products);
-                        bookCollection = new ProductApp.BookCollection(bookArray);
-                        var addprod = new ProductApp.AddBookItemView({collection:bookCollection});
-                        var exportprod = new ProductApp.ExportBooks({collection:bookCollection});
-                        
-                        self.showView(self);
-                    }
-                });
-            } 
         },
 
-        showView: function (context) {
-            var bookCollectionView = new ProductApp.BookCollectionView({collection: bookCollection});
-            context.RegionOne.show(bookCollectionView);
+        showProductsCollectionView: function (context) {
+            var productsCollectionView = new ProductApp.ProductsCollectionView({collection: productsCollection});
+            context.RegionOne.show(productsCollectionView);
         },
 
         /* called when the view displays in the UI */
         onShow: function() {
             console.log('main layout: onShow');
 
-            if( bookCollection.models )
+            var self = this;
+            
+            if( !productsCollection.models )
             {
-                this.showView(this);
+                productsCollection = new ProductApp.ProductsCollection();
+                productsCollection.fetch({
+                    success: function (prod) {
+                        var productsArray = _.clone(productsCollection.models[0].attributes.products);
+                        productsCollection = new ProductApp.ProductsCollection(productsArray);
+
+                        var addprod = new ProductApp.AddProductsItemView({collection:productsCollection});
+                        var exportprod = new ProductApp.ExportProductss({collection:productsCollection});
+                        
+                        self.showProductsCollectionView(self);
+                    }
+                });
+            } 
+            else
+            {
+                this.showProductsCollectionView(this);
             }
         }
     });
