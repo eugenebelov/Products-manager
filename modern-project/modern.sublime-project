@@ -2,6 +2,12 @@
 	"folders":
 	[
 		{
+<<<<<<< HEAD
+=======
+			"path": "/PROJECTS/HTML-Projects/Products-manager/modern-project"
+		},
+		{
+>>>>>>> backbone-ex
 			"path": "app"
 		}
 	]
