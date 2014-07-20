@@ -1,3 +1,4 @@
+'use strict';
 
 var ProductApp = new Backbone.Marionette.Application();
 
@@ -5,6 +6,24 @@ var productsCollection = {};
 var Router = {};
 var EventListener = {};
 _.extend(EventListener, Backbone.Events);
+
+Handlebars.getTemplate = function(name) {
+    if (Handlebars.templates === undefined || Handlebars.templates[name] === undefined) {
+        $.ajax({
+            url : './scripts/templates/' + name + '.hbs',
+            datatype: 'text/javascript',
+            success : function(response, status, jqXHR) {
+                if (Handlebars.templates === undefined) {
+                    Handlebars.templates = {};
+                }
+                //Handlebars.templates[name] = Handlebars.compile(jqXHR.responseText);
+                Handlebars.templates[name] = Handlebars.compile(response);
+            },
+            async : false
+        });
+    }
+    return Handlebars.templates[name];
+};
 
 ProductApp.addRegions({
 	productListRegion: "#view",
@@ -43,18 +62,13 @@ ProductApp.addRegions({
     });
  
     ProductApp.ProductsCollection = Backbone.Collection.extend({
-         
-        /* set model type used for this collection */
         model: ProductApp.ProductsModel,
- 
-        /* comparator determines how collection is sorted */
         comparator: 'authorLast',
-
         url: 'scripts/fake/data.json'
     });
  
     ProductApp.EditProductFormView = Marionette.ItemView.extend({
-        template: _.template($('#product-edit-item').html()),
+        template: Handlebars.getTemplate("product-edit"),
         events: {
             'click .btn.edit-product': 'onEditProduct',
             'click .btn.cancel-edit': 'onCancel'
@@ -91,7 +105,7 @@ ProductApp.addRegions({
     });
 
     ProductApp.AddProductFormView = Marionette.ItemView.extend({
-        template: _.template($('#product-add-item').html()),
+        template: Handlebars.getTemplate("product-add"),
         events: {
             'click .btn.add-product': 'onCreateProduct',
             'click .btn.cancel-add': 'onCancel'
@@ -144,7 +158,6 @@ ProductApp.addRegions({
             EventListener.bind('onexport', this.onExportHandler, this);
         },
         onExportHandler: function(event) {
-            console.log("Export part triggered", this.collection.toJSON());
             this.$el.empty()
                     .append($.parseHTML("<b>Parsed</b><br/>"))
                     .append(JSON.stringify(this.collection.toJSON()));
@@ -154,8 +167,7 @@ ProductApp.addRegions({
     ProductApp.ProductsItemView = Marionette.ItemView.extend({
         tagName: 'tr',
  
-        /* set the template used to display this view */
-        template: _.template($('#product-list-template').html()),
+        template: Handlebars.getTemplate("product-list-item"),
 
         events: {
             'click .edit-product': 'onEditProductClick',
@@ -171,30 +183,24 @@ ProductApp.addRegions({
             this.model.destroy();
         },
 
-        /* used to show the order in which these method are called */
         initialize: function(){ 
             this.model.on('change', this.render, this);
             this.model.on('destroy', this.remove, this);
         },
-        // onRender: function(){ console.log('ProductsItemView: onRender >>> ' + this.model.get('title')) },
-        // onShow: function(){ console.log('ProductsItemView: onShow >>> ' + this.model.get('title')) },
         remove: function(){ 
             this.$el.remove() 
         },
         render: function(){
-            this.$el.html( this.template(this.model.toJSON()));
+            this.$el.html( this.template(this.model.toJSON()) );
             return this;
         }
     });
  
     ProductApp.ProductsCollectionView = Marionette.CollectionView.extend({
         tagName: "tbody",
-        id: "collection-body",
-        /* explicitly set the itemview used to display the models in this collection */
+        id: "collection-body", 
         childView: ProductApp.ProductsItemView,
  
-        // initialize: function(){ },
-        // onRender: function(){ },
         onShow: function(){ 
             console.log("ProductsCollectionView on Show");
             $('#collection-body').contents().unwrap();
@@ -202,30 +208,17 @@ ProductApp.addRegions({
     });
  
     ProductApp.AppLayoutView = Backbone.Marionette.LayoutView.extend({
-         
-        /* the auto-generated element which contains this view */
         tagName: 'table',
- 
-        /* id attribute for the auto-generated container element */
         id: 'products-table',
         className: 'table',
- 
-        /* reference to the template which will be rendered for this view */
-        template: '#product-list-body-template',
- 
-        /* define the regions within this layout, into which we will load additional views */
+        template: Handlebars.getTemplate("product-list"),
         regions: {
             RegionOne : '#products-table-body'
         },
- 
-        /* called when the view initializes, before it displays */
         initialize: function() {
             console.log('main layout: initialize');
         },
  
-        /* called when view renders in the DOM. This is a good place to 
-            add nested views, because the views need existing DOM elements
-            into which to be rendered. */
         onRender: function() {
             console.log('main layout: onRender');
         },
@@ -234,8 +227,6 @@ ProductApp.addRegions({
             var productsCollectionView = new ProductApp.ProductsCollectionView({collection: productsCollection});
             context.RegionOne.show(productsCollectionView);
         },
-
-        /* called when the view displays in the UI */
         onShow: function() {
             console.log('main layout: onShow');
 
@@ -269,7 +260,6 @@ ProductApp.addRegions({
         
         Backbone.history.start();
 
-        /* display the layout in the region defined at the top of this file */
         ProductApp.productListRegion.show(layout);
     });
 // });

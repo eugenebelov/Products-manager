@@ -9,164 +9,45 @@
         <title>modern project</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css styles/vendor.css -->
-        <!-- bower:css -->
-        <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:css(.tmp) styles/main.css -->
+
         <link rel="stylesheet" href="styles/libs/bootstrap/bootstrap.css">
         <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
-
-        <script type="text/template" id="product-add-item">
-            <form id="addForm" class="form-horizontal">
-              <div class="form-group">
-                <label for="inputTitle" class="col-sm-1 control-label">Title</label>
-                <div class="col-sm-10">
-                  <input type="text" name="title" id="inputTitle" class="form-control" placeholder="title" value="New product"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="inputSku" class="col-sm-1 control-label">Sku</label>
-                <div class="col-sm-10">
-                  <input type="text" name="sku" id="inputSku" class="form-control" placeholder="sku" value="123" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="inputPrice" class="col-sm-1 control-label">Price</label>
-                <div class="col-sm-10">
-                  <input type="text" name="price" id="inputPrice" class="form-control" placeholder="price" value="99.98"/>
-                </div>
-              </div>
-            </form>
-            <div class="actions pull-right">
-                <div class="btn btn-primary add-product">Add</div>
-                <div class="btn btn-warning cancel-add">Cancel</div>
-            </div>
-        </script>
-
-        <script type="text/template" id="product-edit-item">
-            <form id="editForm" class="form-horizontal">
-              <div class="form-group">
-                <label for="inputTitle" class="col-sm-1 control-label">Title</label>
-                <div class="col-sm-10">
-                  <input type="text" name="title" id="inputTitle" class="form-control" placeholder="title" value="<%=title %>"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="inputSku" class="col-sm-1 control-label">Sku</label>
-                <div class="col-sm-10">
-                  <input type="text" name="sku" id="inputSku" class="form-control" placeholder="sku" value="<%=sku %>" disabled/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="inputPrice" class="col-sm-1 control-label">Price</label>
-                <div class="col-sm-10">
-                  <input type="text" name="price" id="inputPrice" class="form-control" placeholder="price" value="<%=price %>"/>
-                </div>
-              </div>
-            </form>
-            <div class="actions pull-right">
-                <div class="btn btn-primary edit-product">Save changes</div>
-                <div class="btn btn-warning cancel-edit">Cancel</div>
-            </div>
-        </script>
-        
-        <!-- product list item template -->
-        <script type="text/template" id="product-list-template">
-            
-              <td><%=title %></td>
-              <td><%=sku %></td>
-              <td>$<%=price %></td>
-              <td class="actions">
-                  <div class="btn btn-primary edit-product">edit</div>
-                  <div class="btn btn-warning remove-product">delete</div>
-              </td>
-            
-        </script>
-
-        <!-- product list main template -->
-        <script type="text/template" id="product-list-body-template">
-            
-              <thead>
-                <tr>
-                  <th>Title</th><th>Sku</th><th>Price</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="products-table-body"></tbody>
-            
-        </script>
 
     </head>
     <body>
-        <div class="main">
-            <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Products manager</h3>
-                    </div>
-                    <div class="btn-group" id="add-button-bar">
-                        <div class="btn btn-primary btn-sm show-export-json">Export to JSON</div>
-                        <div class="btn btn-primary btn-sm show-add-product">Add product</div>
-                    </div>
-                    <div id="view" class="panel-body"></div>
+      <div class="main">
+          <div class="col-md-9">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">Products manager</h3>
+                  </div>
+                  <div class="btn-group" id="add-button-bar">
+                      <div class="btn btn-primary btn-sm show-export-json">Export to JSON</div>
+                      <div class="btn btn-primary btn-sm show-add-product">Add product</div>
+                  </div>
+                  <div id="view" class="panel-body"></div>
 
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Exported JSON</h3>
-                    </div>
-                    <div id="viewExported" class="panel-body"></div>
-                </div>
-            </div>
-        </div>  
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">Exported JSON</h3>
+                  </div>
+                  <div id="viewExported" class="panel-body"></div>
+              </div>
+          </div>
+      </div>  
 
-    <script type="text/template" id="product-list-tpl">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Sku</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="products-table-body">
-            
-          </tbody>
-    </script>
 
-    <script type="text/template" id="product-list-item-tpl">
-          <td><%= title %></td>
-          <td><%= sku %></td>
-          <td><%= price %></td>
-          <td class="actions">
-              <div class="btn btn-primary" onclick="productModel.onEdit(<%= sku %>)">edit</div>
-              <div class="btn btn-warning" onclick="productModel.onRemove(<%= sku %>)">delete</div>
-          </td>
-    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/2.0.3/backbone.marionette.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/underscore/underscore.js"></script>
-        <script src="bower_components/backbone/backbone.js"></script>
-        <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
-        <script src="bower_components/requirejs/require.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
+    <script src="scripts/main.js"></script>
 
-        <!-- build:js scripts/main.js -->
-        <!-- <script src="scripts/model.js"></script> -->
-        <!-- <script src="scripts/views.js"></script> -->
-        <!-- <script src="scripts/controller.js"></script> -->
-        <script src="scripts/main.js"></script>
-        <!-- endbuild -->
-</body>
+  </body>
 </html>
