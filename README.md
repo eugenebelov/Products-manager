@@ -10,4 +10,6 @@ This project created using <br />
 God save us....
 
 
-Use this to break all to modules -> http://backbonetutorials.com/organizing-backbone-using-modules/
+Use this to break all to modules -> 
+http://backbonetutorials.com/organizing-backbone-using-modules/
+https://github.com/tastejs/todomvc/blob/gh-pages/labs/dependency-examples/backbone_marionette_require/js/app.js
