@@ -4,9 +4,8 @@ define([
 	'marionette',
 	'handlebars',
 	'../model/ProductsCollection',
-	'./GetTemplateHbs',
   	'./ProductsListView'
-], function($, _, Marionette, Handlebars, GetTemplateHbs, ProductsListView, ProductsCollection) {
+], function($, _, Marionette, Handlebars, ProductsListView, ProductsCollection) {
 	return Backbone.Marionette.LayoutView.extend({
         tagName: 'table',
         id: 'products-table',
@@ -16,26 +15,27 @@ define([
             RegionOne : '#products-table-body'
         },
         initialize: function() {
-            // console.log('main layout: initialize');
+            // console.log('main layout: initialize', ProductsListView, ProductsCollection);
 
             this.collection.bind("reset", _.bind(this.render, this));
         },
 
         onRender: function() {
-            // console.log('main layout: onRender', this.collection);
+            // console.log('main layout: initialize', ProductsListView, ProductsCollection);
 
             if(this.collection.models.length > 0)
             	this.showProductsCollectionView();
         },
 
         showProductsCollectionView: function () {
-        	
-        	this.productList = new ProductsCollection(_.clone(this.collection.models[0].attributes.products));
-            this.RegionOne.show(this.productList);
+        	console.log(this.collection)
+        	// var productList = new ProductsCollection(_.clone(this.collection.models[0].attributes.products));
+            var listView = new ProductsListView({collection: this.collection});
+            this.RegionOne.show(listView);
         },
 
         onShow: function() {
-            
+            // console.log('main layout: initialize', ProductsListView, ProductsCollection);            
         }
     });
 });

@@ -1,21 +1,19 @@
 define([
 	'jquery',
 	'underscore',
-	'marionette', 
-	'handlebars',
-	'router',
-	'views/ProductItemView'
-], function($, _, Marionette, ProductItemView) {
+    'backbone',
+	'marionette',
+    './ProductItemView' 
+], function($, _, Backbone, Marionette, ProductItemView) {
 
-	return Marionette.CollectionView.extend({
+return Backbone.Marionette.CollectionView.extend({
         tagName: "tbody",
         id: "collection-body", 
         childView: ProductItemView,
 
         onShow: function(){ 
             console.log("ProductsCollectionView on Show");
-
-            $('#collection-body').contents().unwrap();
+            // $('#collection-body').contents().unwrap();
         }
     });
 });

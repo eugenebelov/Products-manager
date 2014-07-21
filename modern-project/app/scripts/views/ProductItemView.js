@@ -17,6 +17,10 @@ define([
             'click .remove-product': 'onRemoveProductClick'
         },
 
+        onRender: function() {
+            console.log("onRender");
+        },
+
         onEditProductClick: function(event) {
         	console.log("edit", this.model.get('sku'))
             // Router.navigate("edit/"+this.model.get('sku'), {trigger: true, replace: true});
@@ -30,6 +34,8 @@ define([
         initialize: function(){ 
             this.model.on('change', this.render, this);
             this.model.on('destroy', this.remove, this);
+
+            console.log("init");
         },
         remove: function(){ 
             this.$el.remove() 
