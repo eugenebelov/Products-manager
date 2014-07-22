@@ -4,8 +4,9 @@ define([
 	'backbone',
 	'marionette',
 	'handlebars',
-	'./ProductItemView' 
-], function($, _, Backbone, Marionette, Handlebars, ProductItemView) {
+	'./ProductItemView',
+	'./GetHandlebarsTemplate' 
+], function($, _, Backbone, Marionette, Handlebars, ProductItemView, GetHandlebarsTemplate) {
 	'use strict';
 
 	return Backbone.Marionette.CompositeView.extend({
@@ -14,11 +15,6 @@ define([
 
 		childView: ProductItemView,
 
-		childViewContainer: '#products-table-body',
-
-		initialize: function () {
-			// this.listenTo(this.collection, 'all', this.render, this);
-			// this.collection.bind("reset", _.bind(this.render, this));
-		}
+		childViewContainer: '#products-table-body'
 	});
 });

@@ -4,9 +4,8 @@ define([
   'backbone',
 	'marionette', 
 	'handlebars',
-	'router',
-	'./GetTemplateHbs'
-], function($, _, Backbone, Marionette, Handlebars, Router, GetTemplateHbs) {
+	'router'
+], function($, _, Backbone, Marionette, Handlebars, Router) {
 
 return Marionette.ItemView.extend({
         template: Handlebars.getTemplate("product-edit"),
