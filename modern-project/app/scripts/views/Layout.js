@@ -1,11 +1,15 @@
 define([
 	'jquery',
 	'underscore',
+    'backbone',
 	'marionette',
 	'handlebars',
 	'../model/ProductsCollection',
   	'./ProductsListView'
-], function($, _, Marionette, Handlebars, ProductsListView, ProductsCollection) {
+], function($, _, Backbone, Marionette, Handlebars, ProductsListView, ProductsCollection) {
+
+    var products = {};
+
 	return Backbone.Marionette.LayoutView.extend({
         tagName: 'table',
         id: 'products-table',
@@ -17,25 +21,44 @@ define([
         initialize: function() {
             // console.log('main layout: initialize', ProductsListView, ProductsCollection);
 
-            this.collection.bind("reset", _.bind(this.render, this));
+            // this.collection.bind("reset", _.bind(this.render, this));
         },
 
         onRender: function() {
-            // console.log('main layout: initialize', ProductsListView, ProductsCollection);
+            console.log('main layout: render');
 
-            if(this.collection.models.length > 0)
-            	this.showProductsCollectionView();
+            // if(this.collection.models.length > 0) {
+            	// this.showProductsCollectionView();
+                // this.show();
+            // }
         },
 
         showProductsCollectionView: function () {
-        	console.log(this.collection)
-        	// var productList = new ProductsCollection(_.clone(this.collection.models[0].attributes.products));
-            var listView = new ProductsListView({collection: this.collection});
-            this.RegionOne.show(listView);
+        	// var productsArray = _.clone(this.collection.models[0].attributes.products);
+        	// var productList = new ProductsCollection(productsArray);
+            // var listView = new ProductsListView({collection: productList});
+
+            // console.log(this.collection);
+            // this.RegionOne.show(listView);
         },
 
         onShow: function() {
-            // console.log('main layout: initialize', ProductsListView, ProductsCollection);            
+            var self = this;
+            products = new ProductsCollection(['1', '2', '3']);
+            console.log(this.collection);
+            if( !this.collection.models )
+            {
+                this.collection.fetch({
+                    success: function (prod) {
+                        var productsArray = _.clone(self.collection.models[0].attributes.products);
+
+                        this.collection = new ProductsCollection(productsArray);
+
+                        
+                        self.showProductsCollectionView(self);
+                    }
+                });
+            }
         }
     });
 });

@@ -7,30 +7,45 @@ define([
   'router',
   'handlebars',
   'model/ProductsCollection',
-  'views/Layout'
+  'views/ListCompositeView'
   
-], function($, _, Backbone, Marionette, Router, Handlebars, ProductsCollection, Layout){
+], function($, _, Backbone, Marionette, Router, Handlebars, ProductsCollection, ListCompositeView){
     
 	var app = new Backbone.Marionette.Application();
-  	var productsCollection = new ProductsCollection();
-  	
-  	var productsLayout = new Layout({collection: productsCollection});
-  	
-  	// var editView = new EditView(viewOptions);
-  	// var addView = new AddProductsFormView({collection: productsCollection});
-  	// var mainButtonBarView = new AddProductsItemView(viewOptions);
-  	// var exportView = new ExportView(viewOptions);
+	var productsCollection = new ProductsCollection();
+	
+  var productsList = new ListCompositeView({collection:productsCollection});
 
-  	app.addRegions({
-        productListRegion: "#view",
-        exportRegion: "#viewExported"
-    });
+	// var productsLayout = new Layout({collection: productsCollection});
+	// var editView = new EditView(viewOptions);
+	// var addView = new AddProductsFormView({collection: productsCollection});
+	// var mainButtonBarView = new AddProductsItemView(viewOptions);
+	// var exportView = new ExportView(viewOptions);
 
-    app.addInitializer(function(){
-        app.productListRegion.show(productsLayout);
+	app.addRegions({
+      productListRegion: "#view",
+      exportRegion: "#viewExported"
+  });
 
-        productsCollection.fetch({reset:true});
-    });
+  app.addInitializer(function(){
+      // app.productListRegion.show(productsLayout);
 
-  	return window.app = app;
+      app.productListRegion.show(productsList);
+
+      productsCollection.fetch({
+                    success: function (prod) {
+                        var productsArray = _.clone(productsCollection.models[0].attributes);
+
+                        $.each(productsArray, function(index, obj) {
+                          productsArray[index] = JSON.stringify(obj);
+                        });
+                        // console.log("fetch", productsArray);
+                        productsCollection.model = productsArray;
+                        // productsCollection = new ProductsCollection(productsArray);
+
+                    }
+                });
+  });
+
+	return window.app = app;
 });

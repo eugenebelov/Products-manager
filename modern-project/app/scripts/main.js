@@ -14,14 +14,16 @@ require.config({
   },
   shim: {
         'handlebars': {
-            //These script dependencies should be loaded before loading
-            //backbone.js
-            // deps: ['underscore', 'jquery'],
-            //Once loaded, use the global 'Backbone' as the
-            //module value.
-            exports: 'Handlebars'
+            'exports': 'Handlebars'
+        },
+        'underscore': {
+            'exports': '_'
+        },
+        'backbone': {
+            'deps': ['jquery', 'underscore'],
+            'exports': 'Backbone'
         }
-      }
+    }
 });
 
 require([

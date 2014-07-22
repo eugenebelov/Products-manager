@@ -4,12 +4,12 @@ define([
 	'backbone'
 ], function($, _, Backbone) {
 
-return Backbone.Model.extend({
-        defaults: {
-            title: '',
-            sku: '',
-            price: ''
+	var ProductsModel = Backbone.Model.extend({
+        parse : function(res) { 
+            return res.products;
         }
     });
+
+    return ProductsModel;
 
 });

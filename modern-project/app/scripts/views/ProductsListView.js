@@ -6,7 +6,7 @@ define([
     './ProductItemView' 
 ], function($, _, Backbone, Marionette, ProductItemView) {
 
-return Backbone.Marionette.CollectionView.extend({
+return Marionette.CollectionView.extend({
         tagName: "tbody",
         id: "collection-body", 
         childView: ProductItemView,
