@@ -19,22 +19,6 @@ define([
 		initialize: function () {
 			// this.listenTo(this.collection, 'all', this.render, this);
 			// this.collection.bind("reset", _.bind(this.render, this));
-			// console.log(this);
-		},
-
-		onRender: function () {
-			// this.updateToggleCheckbox();
-			// console.log("render", this.models);
-		},
-
-		updateToggleCheckbox: function () {
-			// console.log(this.collection);
-
-			// var allCompleted = this.collection.reduce(function (lastModel, thisModel) {
-			// 	return lastModel && thisModel.get('completed');
-			// }, true);
-
-			// this.ui.toggle.prop('checked', allCompleted);
 		}
 	});
 });

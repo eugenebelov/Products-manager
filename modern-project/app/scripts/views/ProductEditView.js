@@ -1,23 +1,30 @@
 define([
 	'jquery',
 	'underscore',
+  'backbone',
 	'marionette', 
 	'handlebars',
 	'router',
-  'model/ProductsModel'
-], function($, _, Marionette, Handlebars, Router, ProductsModel) {
+	'./GetTemplateHbs'
+], function($, _, Backbone, Marionette, Handlebars, Router, GetTemplateHbs) {
 
 return Marionette.ItemView.extend({
-        template: Handlebars.getTemplate("product-add"),
+        template: Handlebars.getTemplate("product-edit"),
         events: {
-            'click .btn.add-product': 'onCreateProduct',
-            'click .btn.cancel-add': 'onCancel'
+            'click .btn.edit-product': 'onEditProduct',
+            'click .btn.cancel-edit': 'onCancel'
         },
         initialize: function() {
             $("#view").html(this.el);
             this.render();
         },
-        onCreateProduct:function(event) {
+        render: function() {
+            this.$el.html(this.template(this.options.model.attributes));
+            return this;
+        },
+        onEditProduct:function(event) {
+          console.log(router);
+
             var formData = JSON.stringify(this.$el.find('form').serializeArray());
             var o = {};
             $.each($.parseJSON(formData), function(key, value) {
@@ -30,8 +37,8 @@ return Marionette.ItemView.extend({
                    o[this.name] = this.value || '';
                }
             });
-            var prod = new ProductsModel(o);
-            this.collection.add(prod);
+
+            var model = this.options.model.set(o);
 
             router.navigate("home", {trigger: true, replace: true});
         },
@@ -39,4 +46,5 @@ return Marionette.ItemView.extend({
             router.navigate("home", {trigger: true, replace: true});
         }
     });
+
 });

@@ -1,8 +1,11 @@
 define([
 	'jquery',
 	'underscore',
-	'marionette'
-], function($, _, Marionette) {
+	'marionette',
+  	'views/ProductEditView',
+  	'views/AddProductFormView',
+  	'views/ListCompositeView'
+], function($, _, Marionette, ProductEditView, AddProductFormView, ListCompositeView) {
 
 	return Marionette.AppRouter.extend({
 		routes : {
@@ -11,19 +14,25 @@ define([
 		    'edit/:sku'  : 'edit'
 		},
 		home : function() {
-		    // ProductApp.productListRegion.show(new ProductApp.AppLayoutView());
-		    // this.loadView(new ProductApp.ProductsCollectionView({collection: productsCollection}));
+		    app.productListRegion.show(new ListCompositeView({
+		    	collection: this.options.collection
+		    }));
 		},
 		add : function() {
-			console.log("router add", this);
-		    // this.loadView(new ProductApp.AddProductFormView({collection:productsCollection}));
+		    this.loadView(new AddProductFormView({
+		    	collection: this.options.collection
+		    }));
 		},
 		edit : function(id) {
-		    // this.loadView(new ProductApp.EditProductFormView({collection:productsCollection, model: productsCollection.where({sku:id})[0]}));
+			
+		    this.loadView(new ProductEditView({
+		    					collection: this.options.collection, 
+		    					model: this.options.collection.where({sku:id})[0]
+		    				}));
 		},
 		loadView : function(view) {
 		    this.view && (this.view.close ? this.view.close() : this.view.remove());
 		    this.view = view;
-		}
+		} 
 	});
 });
